@@ -39,9 +39,9 @@ p {
 
 <!-- Title and Name --> 
 
-<h1>Project Title</h1> 
+<h1>Project Proposal <br> Finding the "Chirps" of Gravitational Waves</h1>
 <img style="position: absolute; height: 70px; right:20px; top:60px; border:none;" src="GT_icon.png">
-<span style="font-size: 20px; line-height: 1.5em"><strong>Xueying Huang, Daniel Mullen, Yunlan Sun, Gonghan Xu, Zhigen Zhao, Qigan Zhou </strong></span><br>
+<span style="font-size: 20px; line-height: 1.5em"><strong>Xueying Huang, Daniel Mullen, Adele Yunlan Sun, Gonghan Xu, Zhigen Zhao, Qigan Zhou </strong></span><br>
 <span style="font-size: 18px; line-height: 1.5em">Fall 2018 CS 4476 Computer Vision: Class Project</span><br>
 <span style="font-size: 18px; line-height: 1.5em">Georgia Tech</span>
 <hr>
@@ -51,7 +51,7 @@ p {
 <p style="font-size: 14px"> 
 	On September 14, 2015, the Laser Interferometer Gravitational-Wave Observatory (LIGO) detected gravitational waves directly for the first time in human history. This will certainly be considered one of the most significant events in the 21st century. It marks the beginning of an era that humans can not only “see” the universe through electromagnetic waves but also “hear” the universe through gravitational waves! From now on, human beings are empowered by an extra sense.
 	<br><br>
-	The problem is Einstein’s general relativity predicts that gravitational waves carry linear momentum, but we have no evidence of this effect yet. Fortunately, the amount of net linear momentum carried by the gravitational wave emitted by coalescing binary black holes can be inferred from the recoil velocity (or kick) of the merged final black hole. If we can observe such a kick, it would provide evidence that gravitational waves carry linear momentum. The existence of such a kick is closely related to the high-intensity, high-frequency features (called chirps) in the time-frequency maps of gravitational waves, as shown in <b>Figure 1</b>.
+	The problem is that Einstein’s general relativity predicts that gravitational waves carry linear momentum, but we have no evidence of this effect yet. Fortunately, the amount of net linear momentum carried by the gravitational wave emitted by coalescing binary black holes can be inferred from the recoil velocity (or kick) of the merged final black hole. If we can observe such a kick, it would provide evidence that gravitational waves carry linear momentum. The existence of such a kick is closely related to the high-intensity, high-frequency features (called chirps) in the time-frequency maps of gravitational waves, as shown in <b>Figure 1</b>.
 </p>
 
 <!-- Figure 1 -->
@@ -61,7 +61,7 @@ p {
 </figure>
 
 <p style="font-size: 14px">
-For practical reasons, we want to first study the chirp features on the gravitational waveforms produced by numerical relativity simulations of binary black holes. It will be beneficial to use computer vision algorithms to automatically process these time-frequency maps. <b>Therefore, the first goal of our project is to apply techniques of computer vision to automatically label these time-frequency maps in terms of the chirp features</b>.<br><br>
+For practical reasons, we want to first study the chirp features on the gravitational waveforms produced by numerical relativity simulations of binary black holes. It will be beneficial to use computer vision algorithms to automatically process these time-frequency maps. <b>Therefore, the goal of our project is to apply techniques of computer vision to automatically label these time-frequency maps in terms of the chirp features</b>.<br><br>
 
 Specifically, the <b>inputs</b> to our system are time-frequency maps of simulated gravitational waves at a specific time window around the merger time (defined at t=0 sec) of binary black holes. The time window will be roughly around (-0.05 sec, 0.05 sec) since physically we are only interested in chirps within this domain. The time-frequency map will be an intensity map, accompanied by a time array and a frequency array that define the coordinates of the two-dimensional intensity map. <b>Figure 1</b> shows such a sample input.<br><br>
 
@@ -69,7 +69,7 @@ The <b>output</b> of our system is closely related to three questions that we wa
 <ol>
 	<li>The number of chirps presented in this time-frequency map</li>
 	<li>The times corresponding to each identified chirp</li>
-	<li>The approximate total intensity of each chirp, in a relative sense. Physically, we care more about whether a chirp is strong or weak in terms of its total intensity instead of the exact value of its total intensity.</li>
+	<li>The approximate total intensity of each chirp, in a relative sense. Physically, we care more about whether a chirp is relatively strong or weak in terms of its total intensity instead of the exact value of its total intensity.</li>
 </ol>
 Besides providing a system to calculate the outputs, we want to compare different approaches to this problem. The details will be elaborated upon in the experiments and results section.</p>
 <br><br><br>
@@ -81,18 +81,18 @@ Besides providing a system to calculate the outputs, we want to compare differen
 
 In order to achieve the desired results of counting and locating the chirps and characterizing the intensities of them, several computer vision techniques can be employed to process the time-frequency images.<br><br>
 
-For example, to identify a region where enough chirp signal is present, the original time-frequency image can be thresholded into binary image. The conventional thresholding methods are unlikely to perform well because the original image is not likely to be bimodal with clear separation. To overcome this problem, adaptive thresholding can be used to locally binarize the image.<br><br>
+For example, to identify a region where enough chirp signal is present, the original time-frequency image can be thresholded into a binary image. The conventional thresholding methods are unlikely to perform well because the original image is not likely to be bimodal with clear separation. To overcome this problem, adaptive thresholding can be used to locally binarize the image.<br><br>
 
 Since all chirps are approximately corners, Harris corner detector is useful in localizing the chirps in the binarized image. Subsequently, chirp selection can be done by analyzing the properties of each corner detected. Alternatively, chirps can be found by identifying connected components within the image above each row of pixels. The chirps are then located at the top most pixels of those connected components. The connected components can be found using either recursive search or the 2-pass labeling method as covered in lecture.<br><br>
 
-If the traditional image processing methods mentioned above are not able to produce accurate chirp counting results, convolutional neural networks can be used. Since all images in the datasets are labelled, it is feasible to train a neural network with the labelled training set and evaluate the performance of the algorithm with the test set.<br><br>
+If the traditional image processing methods mentioned above are not able to produce accurate chirp counting results, convolutional neural networks can be used. Since all images in the datasets are labelled (see the experiments and results section), it is feasible to train a neural network with the labelled training set and evaluate the performance of the algorithm with the test set.<br><br>
 
 Once the chirps are counted and localized, the intensity information can be retrieved from the original time-frequency images by separating each identified chirp region from the base of the wave signal. This can potentially be done by locating the low-intensity (dark) corners between two adjacent chirps using the Harris corner detector. Another way is to pinpoint the frequency troughs of the boundary between the foreground and the background, where the boundary can be extracted with the Canny edge detector.
 </p>
 <br><br><br>
 
 <!-- Experiments & Results -->
-<h3>Experiments and results</h3>
+<h3>Experiments and Results</h3>
 <p style="font-size: 14px">
 	In the problem statement, we have given a general idea of how this project will proceed. In this section we provide more details.<br><br>
 
@@ -109,8 +109,7 @@ Once the chirps are counted and localized, the intensity information can be retr
 	Although our fundamental approaches to this problem are the signal processing techniques that we learned in class, we will still borrow the concepts of training and testing data from machine learning. We are going to prepare two separate sets of data -- one for developing our system (“training”) and the other for testing. Each instance of the training and test sets consists of a 2-D intensity array, a time array, and a frequency array. Each instance will be labelled manually in terms of
 	<ol>
 		<li>The number of chirps presented in this time-frequency map</li>
-		<li>The times corresponding to each identified chirp</li>
-		<li>The approximate total intensity of each chirp, in a relative sense. Physically, we care more about whether a chirp is strong or weak in terms of its total intensity instead of the exact value of its total intensity.</li>
+		<li>The time corresponding to each identified chirp</li>
 	</ol>
 	Notice that we will not label the instances in terms of the relative intensity of each chirp because labelling the intensity by eyeballing is subject to significant errors.<br><br>
 
@@ -150,10 +149,10 @@ Once the chirps are counted and localized, the intensity information can be retr
 
 
 	<span style="font-size: 16px">Evaluation metric</span><br>
-	At this stage, given the unavoidable errors in our labelled data sets and the uncertainties of the outcomes, the success of this project is defined below:
+	At this stage, given the unavoidable errors in our labelled data sets and the uncertainties of the experimental outcomes, the success of this project is defined below:
 	<ol>
 		<li>For counting the number of chirps, an accuracy of over 70% for at least one algorithm (out of the two) over the entire test set. Specifically, we want (the number of test instances whose labelled number of chirps match our system’s calculation / the total number of test instances) > 70%. We think 70% is a reasonable criterion because some chirps with low intensities can be very ambiguous and there are a lot of low intensity chirps in our data sets.</li>
-		<li>For identifying the time locations of the chirps, a total accuracy of over 65% for the same algorithm (the one that passes the first criterion) over the entire test set. Specifically, we want (the total number of correctly auto-marked, pre-labelled chirps in the test set / the total number of pre-labelled chirps in the test set) > 65%. We define a tolerance window of 0.01 sec such that if the time position of a chirp marked by our system deviates from the corresponding labelled time position by less than 0.01 sec, then we consider it as a correct marking. We define such a tolerance window and a slightly looser criterion for success in this criterion than the first one because in addition to the errors involved in identifying the ambiguous chirps, the manual labelling of the time positions are likely to include significant error.</li>
+		<li>For identifying the time locations of the chirps, a total accuracy of over 65% for the same algorithm (the one that passes the first criterion) over the entire test set. Specifically, we want (the total number of correctly auto-marked, pre-labelled chirps in the test set / the total number of pre-labelled chirps in the test set) > 65%. We define a tolerance window of 0.01 sec such that if the time position of a chirp marked by our system deviates from the corresponding labelled time position by less than 0.01 sec, then we consider it as a correct marking. We define such a tolerance window and a slightly looser metric for success in this criterion than the first one because in addition to the errors involved in identifying the ambiguous chirps, the manual labelling of the time positions are likely to include nontrivial error.</li>
 		<li>For identifying the relative intensities of chirps, instead of using a quantitative metric, we will only evaluate it qualitatively by manually examining the outputs of our system over the entire test set. If we find the output over a test instance generally reasonable, we will then mark the test result of this instance as accurate. We want to achieve an accuracy rate of above 70% over the entire test set, due to the same reason for the first criterion.</li>
 	</ol>
 </p>
@@ -164,15 +163,15 @@ Once the chirps are counted and localized, the intensity information can be retr
 <ul style="font-size: 12pt">
 	<li>Xueying Huang: xhuang327, 903169048</li>
 	<li>Daniel Mullen: dmullen3, 903135992</li>
-	<li>Yunlan Sun: ysun379, 903151701</li>
+	<li>Adele Yunlan Sun: ysun379, 903151701</li>
 	<li>Gonghan Xu: gxu36, 903073183</li>
 	<li>Zhigen Zhao: zzhao300, 903057390</li>
 	<li>Qigan Zhou: qzhou73, 903083827</li>
 </ul>
 
   <hr>
-  <footer> 
-  <p style="font-size: 14px">© Xueying Huang, Daniel Mullen, Yunlan Sun, Gonghan Xu, Zhigen Zhao, Qigan Zhou</p>
+  <footer>
+  <p style="font-size: 14px">© Xueying Huang, Daniel Mullen, Adele Yunlan Sun, Gonghan Xu, Zhigen Zhao, Qigan Zhou</p>
   </footer>
 </div>
 </div>
