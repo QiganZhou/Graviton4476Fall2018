@@ -96,3 +96,10 @@ Thumbs.db
 
 # Temporary files
 ~*
+
+# Personal testing scripts.
+mytest.py
+
+# Data files
+*.npy
+*.npz
