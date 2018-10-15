@@ -88,8 +88,8 @@ class TfMap(object):
 
 	def __str__(self):
 		return "{}, iota: {}, phi: {}.".format(self.waveName,
-											  angToStr(self.iota),
-											  angToStr(self.phi))
+											   angToStr(self.iota),
+											   angToStr(self.phi))
 
 	def __repr__(self):
 		return self.__str__()
@@ -101,6 +101,6 @@ class TfMap(object):
 		plt.xlabel("time (s)")
 		plt.ylabel("frequency (Hz)")
 		plt.title("{}, iota: {}, phi: {}".format(self.waveName,
-											  angToStr(self.iota),
-											  angToStr(self.phi)))
+												 angToStr(self.iota),
+												 angToStr(self.phi)))
 		plt.show()
