@@ -3,7 +3,7 @@
 <head>
 <title>Graviton</title>
 <meta charset="UTF-8">
-<meta name="description" content="Devise and implement methods that are able to automatically summarize (predict) the chirp features of an input time-frequency map.">
+<meta name="description" content="Devise and implement methods that are able to automatically summarize (predict) the chirp features of an input time-frequency map. We will experiment with three different algorithms to achieve this goal.">
 
 <style>
 
@@ -182,7 +182,8 @@ table {
 	<br>	
 	<h2 style="font-weight: bold">Abstract</h2>
 	<p>
-		The high-frequency-high-amplitude features (called chirps) present in these time-frequency maps of gravitational waves provide supporting evidence to the unproven theory that gravitational waves carry linear momentum. In this project, we aim to devise and implement methods that are able to automatically summarize (predict) the chirp features of an input time-frequency map.
+		The high-frequency-high-amplitude features (called chirps) present in these time-frequency maps of gravitational waves provide supporting evidence to the unproven theory that gravitational waves carry linear momentum. In this project, we aim to devise and implement methods that are able to automatically summarize (predict) the chirp features of an input time-frequency map. We will experiment with three different algorithms to achieve this goal.
+
 	</p>
 	<br>
 	<img src="teaser_figure.gif" class="center">
@@ -220,7 +221,7 @@ table {
 
 		The problem is that Einstein’s general relativity predicts that gravitational waves carry linear momentum, but we have no evidence of this effect yet. Fortunately, the amount of net linear momentum carried by the gravitational wave emitted by coalescing binary black holes can be inferred from the recoil velocity (or kick) of the merged final black hole. If we can observe such a kick, it would provide evidence that gravitational waves carry linear momentum.<br><br>
 
-		The existence of such a kick is closely related to the high-intensity, high-frequency features (called chirps) in the time-frequency maps of gravitational waves, as shown in <b>Figure 1</b>. 
+		The existence of such a kick is closely related to the high-intensity, high-frequency features (called chirps) in the time-frequency maps of gravitational waves, as shown in Figure 1.
 	</p>
 	<br>
 
@@ -244,9 +245,9 @@ table {
 
 		The inputs to our system are time-frequency maps that are generated from raw waveform data in the format of HDF5 files produced by numerical relativity simulations.These raw waveform data were produced by the numerical relativity group at Georgia Tech and are publicly available at <a href="http://www.einstein.gatech.edu/table/">http://www.einstein.gatech.edu/table/</a>. The process that generates these input time-frequency maps from the raw waveform data was carried out by one of our team members who is currently involved in research of the Georgia Tech numerical relativity group.<br><br>
 
-		Specifically, the <b>inputs</b> to our system are time-frequency maps of simulated gravitational waves at a specific time window around the merger time (defined at t=0 sec) of binary black holes. The time window is approximately (-0.050 sec, 0.035 sec) since physically we are only interested in chirps within this domain. Each time-frequency map input will consist of a 2-D <b>intensity array</b> of 500 rows and 350 columns, a 1-D <b>time array</b> of 350 elements, and a 1-D <b>frequency array</b> of 500 elements. The time array and the frequency array define the coordinates of the intensity array. The elements of the intensity array have dimensionless values between 0 and 1; those of the time array have monotonically increasing values from about -0.05 sec to 0.035 sec; those of the frequency array have monotonically increasing integer values from 4 Hz to 503 Hz. <b>Figure 1</b> shows such a sample input.<br><br>
+		Specifically, the <b>inputs</b> to our system are time-frequency maps of simulated gravitational waves within a specific time window around the merger time (defined at t=0 sec) of binary black holes. The time window is approximately (-0.050 sec, 0.035 sec) since physically we are only interested in chirps within this domain. Each time-frequency map input will consist of a 2-D <b>intensity array</b> of 500 rows and 350 columns, a 1-D <b>time array</b> of 350 elements, and a 1-D <b>frequency array</b> of 500 elements. The time array and the frequency array define the coordinates of the intensity array. The elements of the intensity array have dimensionless values between 0 and 1; those of the time array have monotonically increasing values from about -0.05 sec to 0.035 sec; those of the frequency array have monotonically increasing integer values from 4 Hz to 503 Hz. Figure 1 in the <b>Introduction</b> section shows such a sample input.<br><br>
 
-		The <b>output</b> of our system is closely related to three questions that we want to answer given a time-frequency map. First, how many chirps are there in the time-frequency map? Second, what is the time of each chirp on the time-frequency map? Third, what is the <b>approximate</b> total intensity (you can think of it as total pixel intensity) of each chirp? Notice that <b>physically we only care about whether a chirp is strong or weak in terms of its total intensity instead of the exact value of its total intensity</b>. For example, two sequences of intensities, (2, 20, 22, 97) and (4, 25, 20, 83) have the same <b>relative intensities</b> for our purpose. Therefore, given a time-frequency map instance as the input, the <b>output</b> of our system will be
+		The <b>output</b> of our system is closely related to three questions that we want to answer given a time-frequency map. First, how many chirps are there in the time-frequency map? Second, what is the time of each chirp on the time-frequency map? Third, what is the <b>approximate</b> total intensity (you can think of it as total pixel intensity) of each chirp? Notice that <b>physically we only care about whether a chirp is strong or weak in terms of its total intensity instead of the exact value of its total intensity</b>. For example, two sequences of intensities, (2, 20, 22, 97) and (4, 25, 20, 83) are essentially the same for our purpose, where we say they have the same <b>relative intensities</b>. Therefore, given a time-frequency map instance as the input, the <b>output</b> of our system will be
 	</p>
 
 	<ol>
@@ -265,6 +266,7 @@ table {
   <br>
 	<h2 style="font-weight: bold">Experiments and Results</h2>
 	<p>
+		<u>Experimental Setup</u><br><br>
 		Although our approaches to this problem are the signal processing techniques, we will still borrow the concepts of training and testing data from machine learning. We have prepared two separate sets of data -- one for developing our system (“training”) and the other for testing. Each instance of the training and test sets has the same format as the time-frequency map input described in the <b>Problem Defined</b> section. Each instance has been <b>annotated manually by one of our group members</b> in terms of 
 	</p>
 	<ol>
@@ -276,7 +278,20 @@ table {
 		Notice that we chose not to annotate the instances in terms of the total intensity of each chirp because annotating such a property by eyeballing is subject to significant errors. Also notice that we will use “annotate” to refer to the manual labelling of the training and testing instances. We will use “predict” to refer to the automatic labelling of the instances by our algorithms.<br><br>
 
 		We have prepared 90 training instances and 90 testing instances, randomly sampled without replacement from an original data set of 180 annotated instances. We chose to annotate only 180 instances because such a number of instances already provide a more than comprehensive coverage of all the potential forms of chirp features. Due to random sampling, each of the training and test sets should also provide a more than comprehensive coverage of the chirp features. Besides, since we are tackling this problem with signal processing techniques instead of data-driven methods, we think the prepared training and testing sets are good enough for developing and testing our algorithms.<br><br>
+	</p>
+	<p>
+		<u>Evaluation Metrics</u><br><br>
 
+		When the training and testing instances were being annotated, some of the chirps were found to be very weak in intensity and were thus ambiguous. Subject to uncertainties, the ambiguous chirps of relatively lower intensities were usually not marked as chirps while those with relatively higher intensities were usually marked with chirps. Since these ambiguous chirps are widely present in our data set, it is estimated that about 20% - 30% of our annotated instances are subject to such ambiguity. Moreover, among the 180 instances in total, it is likely that 5-10 of them were annotated <b>mistakenly</b>, which accounts for about 3% - 5% of the total number of annotated instances. Since our algorithms would be able to make predictions consistent with some of the ambiguous annotations, we think a 20% of error rate of an algorithm with respect to the annotations is considered a very good outcome. Since there are no existing solutions to our problem yet, <b>we want to be a bit conservative and use a 30% error rate, i.e. a 70% accuracy, as the rule of thumb for judging our algorithms</b>. Specifically, we will consider an algorithm as successful based on the following criterion:
+	</p>
+
+	<ol>
+		<li>For counting the number of chirps, an accuracy of over 70%. Specifically, we want (the number of test instances whose annotated number of chirps match the algorithm’s prediction / the total number of test instances) > 70%.</li>
+		<li>For identifying the time locations of the chirps, a total accuracy of over 65% over the entire test set. Specifically, we want (the total number of correctly predicted chirp times over the test set / the total number of annotated chirps in the test set) > 65%. <b>We define a tolerance window of 0.01 sec such that if the time position of a chirp predicted by our system deviates from the corresponding annotated time position by less than 0.01 sec, then we consider it as a correct prediction. We define such a tolerance window and a slightly looser criterion for success in this criterion than the previous one because in addition to the potential errors involved in identifying the ambiguous chirps, the manual annotation of the time positions are likely to include non-trivial error</b>.</li>
+		<li>For identifying the total intensities of chirps, instead of using a quantitative metric, we will only evaluate it qualitatively by manually examining the predictions of the algorithm over the entire test set. If we find the prediction for a test instance generally reasonable, we will then regard the prediction of this instance as accurate. We want to achieve an accuracy rate of above 70% over the entire test set, abiding by the 70% rule of thumb.</li>
+	</ol>
+	<p>
+		<u>Algorithms and Preliminary Results</u><br><br>
 		For the first algorithm, threshold then peak finding, experimentation was done to determine which thresholding algorithm performed best on the training data set and which segmentation algorithm performed best. Different thresholding techniques [1] are experimented with the image, as displayed in figure 2. The triangle thresholding method capture more low intensity content than the other thresholding methods. This is good because a lot of the chirps are relatively low intensity.<br>
 	</p>
 
@@ -381,17 +396,6 @@ table {
 
 	<br>
 	<br>
-	<p>
-		<u>Evaluation Metrics</u><br><br>
-
-		When the training and testing instances were being annotated, some of the chirps were found to be very weak in intensity and were thus ambiguous. Subject to uncertainties, the ambiguous chirps of relatively lower intensities were usually not marked as chirps while those with relatively higher intensities were usually marked with chirps. Since these ambiguous chirps are widely present in our data set, it is estimated that about 20% - 30% of our annotated instances are subject to such ambiguity. Moreover, among the 180 instances in total, it is likely that 5-10 of them were annotated <b>mistakenly</b>, which accounts for about 3% - 5% of the total number of annotated instances. Since our algorithms would be able to make predictions consistent with some of the ambiguous annotations, we think a 20% of error rate of an algorithm with respect to the annotations is considered a very good outcome. Since there are no existing solutions to our problem yet, <b>we want to be a bit conservative and use a 30% error rate, i.e. a 70% accuracy, as the rule of thumb for judging our algorithms</b>. Specifically, we will consider an algorithm as successful based on the following criterion:
-	</p>
-
-	<ol>
-		<li>For counting the number of chirps, an accuracy of over 70%. Specifically, we want (the number of test instances whose annotated number of chirps match the algorithm’s prediction / the total number of test instances) > 70%.</li>
-		<li>For identifying the time locations of the chirps, a total accuracy of over 65% over the entire test set. Specifically, we want (the total number of correctly predicted chirp times over the test set / the total number of annotated chirps in the test set) > 65%. <b>We define a tolerance window of 0.01 sec such that if the time position of a chirp predicted by our system deviates from the corresponding annotated time position by less than 0.01 sec, then we consider it as a correct prediction. We define such a tolerance window and a slightly looser criterion for success in this criterion than the previous one because in addition to the potential errors involved in identifying the ambiguous chirps, the manual annotation of the time positions are likely to include non-trivial error</b>.</li>
-		<li>For identifying the total intensities of chirps, instead of using a quantitative metric, we will only evaluate it qualitatively by manually examining the predictions of the algorithm over the entire test set. If we find the prediction for a test instance generally reasonable, we will then regard the prediction of this instance as accurate. We want to achieve an accuracy rate of above 70% over the entire test set, abiding by the 70% rule of thumb.</li>
-	</ol>
 </div>
 
 <div id="Qualitative Results" class="tabcontent" style="display:none">
@@ -399,7 +403,8 @@ table {
   	<h2 style="font-weight: bold">Qualitative Results</h2>
   	<p>
   		The triangle threshold and segmentation algorithm is able to localize the peak and valley points effectively given an appropriate binarization. The current method of thresholding is not ideal, as the thresholding result does not closely follow human manual annotation.<br><br>
-		The Harris corner detector is able to locate most peaks and valleys, but it also locates several points that are not of interest. The binary image produced by the current thresholding technique has peaks that are of similar frequencies as those in the original image, but have valleys that are of higher frequencies than those in the original image. The kmeans algorithm had good performance in binarizing images. Most of the peaks were found correctly, but there were a few cases especially where the binarized peak reaches the top of the image, that the algorithm struggled on. The valley finding algorithm also had very good performance. The relative intensity calculation has a few issues when compared to the visual checking of intensities. It seems to give much higher intensities for short wide hills than sharp peaks. This doesn’t match the ordering that the relative peak intensities would be labeled by hand. 
+		The Harris corner detector is able to locate most peaks and valleys, but it also locates several points that are not of interest. The binary image produced by the current thresholding technique has peaks that are of similar frequencies as those in the original image, but have valleys that are of higher frequencies than those in the original image. <br><br>
+		The kmeans algorithm had good performance in binarizing images. Most of the peaks were found correctly, but there were a few cases especially where the binarized peak reaches the top of the image, that the algorithm struggled on. The valley finding algorithm also had very good performance. The relative intensity calculation has a few issues when compared to the visual checking of intensities. It seems to give much higher intensities for short wide hills than sharp peaks. This doesn’t match the ordering that the relative peak intensities would be labeled by hand.
   	</p>
 </div>
 
@@ -410,7 +415,9 @@ table {
 		The chirp features in the time-frequency maps of gravitational waves provide useful information about whether or not the gravitational waves carry linear momentum. To study this subject, it will be very useful to develop algorithms that are able to automatically summarize (predict) the chirp features of an input time-frequency map, which defines the goal of our project.<br><br>
 		Future steps for the triangle threshold and peak finding algorithm include improving the region identification and testing the accuracy of the algorithm in identifying the number of peaks and peak locations.<br><br>
 		Future steps for the Harris corner detector algorithm include post-processing the points generated by the algorithm in order to filter out false positives and improve the accuracy. Testing of the algorithm can then be done to determine the accuracy of the algorithm in identifying the number of peaks and peak locations.<br><br>
-		Future steps for the kmeans algorithm include improving the peak finding in order to improve the accuracy with which the algorithm counts the number of peaks. Improvements need to be made to the way it calculates relative intensity such that the relative intensities returned are reasonable with what a human would label. More testing can be used to determine the accuracy of the algorithm for locating peaks.
+		Future steps for the kmeans algorithm include improving the peak finding in order to improve the accuracy with which the algorithm counts the number of peaks. Improvements need to be made to the way it calculates relative intensity such that the relative intensities returned are reasonable with what a human would label. More testing can be used to determine the accuracy of the algorithm for locating peaks.<br><br>
+		In our original project proposal, we stated that we would develop two algorithms for identifying the chirps and one algorithm for calculating the chirp intensities. However, we decided to experiment with three algorithms, where each algorithm would independently locate the chirps and calculate the chirp intensities, to make our project more likely to succeed.
+
 	</p>
 </div>
 
